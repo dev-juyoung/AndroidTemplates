@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion buildConfigs.compileSDK
@@ -38,7 +39,46 @@ dependencies {
     // dependencies for androidx artifacts.
     implementation deps.androidx.ktx
     implementation deps.androidx.appcompat
+    implementation deps.androidx.fragment.core
+    implementation deps.androidx.fragment.ktx
+    implementation deps.androidx.room.core
+    implementation deps.androidx.room.reactiveStream
+    implementation deps.androidx.lifecycle.core
+    implementation deps.androidx.lifecycle.ktx
+    implementation deps.androidx.lifecycle.reactiveStream
     implementation deps.androidx.constraintLayout
+
+    // androidx artifacts libraries annotation processors
+    kapt deps.androidx.room.compiler
+    kapt deps.androidx.lifecycle.compiler
+
+    // dependency injection
+    implementation deps.dagger.core
+    implementation deps.dagger.android
+
+    // reactive stream
+    implementation deps.reactiveStream.java
+    implementation deps.reactiveStream.android
+    implementation deps.reactiveStream.kotlin
+
+    // network
+    implementation deps.network.retrofit
+    implementation deps.network.adapter.reactiveStream
+    implementation deps.network.converter.gson
+
+    // java8 datetime backport
+    implementation deps.dateTime
+
+    // secure preferences
+    implementation deps.securePreferences
+
+    // devtools
+    implementation deps.devtools.logger
+    implementation deps.devtools.httpInterceptor
+
+    // 3rd party libraries annotation processors
+    kapt deps.dagger.coreCompiler
+    kapt deps.dagger.androidCompiler
 
     // dependencies for test
     testImplementation deps.test.junit
