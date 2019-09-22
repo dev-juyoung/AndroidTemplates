@@ -4,8 +4,18 @@ ext {
             minSDK     : 23,
             targetSDK  : 28,
             compileSDK : 28,
-            versionCode: 1,
-            versionName: '0.1.0'
+            versionCode: [
+                    dev : 1,
+                    prod: 1
+            ],
+            versionName: [
+                    dev : '0.1.0',
+                    prod: '0.1.0'
+            ],
+            apiUrl     : [
+                    dev : 'https://api.github.com/',
+                    prod: 'https://api.github.com/'
+            ]
     ]
 
     versions = [

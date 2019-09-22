@@ -9,8 +9,6 @@ android {
         applicationId buildConfigs.appId
         minSdkVersion buildConfigs.minSDK
         targetSdkVersion buildConfigs.targetSDK
-        versionCode buildConfigs.versionCode
-        versionName buildConfigs.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,6 +24,42 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    flavorDimensions "mode"
+    productFlavors {
+        dev {
+            dimension "mode"
+            applicationIdSuffix = ".dev"
+            versionCode buildConfigs.versionCode.dev
+            versionName buildConfigs.versionName.dev
+            ext {
+                API_URL = buildConfigs.apiUrl.dev
+            }
+        }
+
+        prod {
+            dimension "mode"
+            versionCode buildConfigs.versionCode.prod
+            versionName buildConfigs.versionName.prod
+            ext {
+                API_URL = buildConfigs.apiUrl.prod
+            }
+        }
+    }
+    android.applicationVariants.all { variant ->
+        def flavor = variant.productFlavors[0]
+        variant.buildConfigField "String", "API_URL", "\"${flavor.ext.API_URL}\""
+        variant.outputs.all {
+            outputFileName = "${getRootProject().name}-${flavor.name}-${variant.versionName}.apk"
+        }
+    }
+    android.variantFilter { variant ->
+        def buildName = variant.buildType.name
+        def flavorName = variant.flavors[0].name
+
+        if (flavorName == 'dev' && buildName == 'release') {
+            variant.ignore = true
+        }
     }
 }
 
