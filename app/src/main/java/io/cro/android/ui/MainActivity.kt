@@ -1,7 +1,8 @@
-package io.cro.android
+package io.cro.android.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import io.cro.android.R
 
 class MainActivity : AppCompatActivity() {
 
