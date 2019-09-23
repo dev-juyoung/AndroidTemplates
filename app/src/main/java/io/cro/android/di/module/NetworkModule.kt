@@ -1,10 +1,11 @@
-package io.cro.android.di
+package io.cro.android.di.module
 
 import android.content.Context
 import dagger.Module
 import dagger.Provides
 import io.cro.android.BuildConfig
 import io.cro.android.data.network.HttpHeaderInterceptor
+import io.cro.android.data.network.api.GitHubApi
 import io.cro.android.extensions.isDebuggable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -41,4 +42,10 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideGithubApi(retrofit: Retrofit): GitHubApi =
+        retrofit.create(GitHubApi::class.java)
 }

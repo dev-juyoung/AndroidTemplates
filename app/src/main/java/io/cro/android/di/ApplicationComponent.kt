@@ -6,6 +6,8 @@ import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import io.cro.android.RootApplication
+import io.cro.android.di.module.ApplicationModule
+import io.cro.android.di.module.RootModule
 import javax.inject.Singleton
 
 @Singleton

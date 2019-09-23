@@ -10,6 +10,7 @@ class HttpHeaderInterceptor : Interceptor {
         val request = chain.request()
         val requestBuilder = request.newBuilder().apply {
             // add your http headers
+            addHeader(Headers.ACCEPT.key, Headers.ACCEPT.value)
         }
 
         return chain.proceed(requestBuilder.build())
@@ -18,6 +19,7 @@ class HttpHeaderInterceptor : Interceptor {
     private companion object {
         enum class Headers(val key: String, val value: String) {
             // add your header key and value type
+            ACCEPT("Accept", "application/vnd.github.v3+json");
         }
     }
 }
