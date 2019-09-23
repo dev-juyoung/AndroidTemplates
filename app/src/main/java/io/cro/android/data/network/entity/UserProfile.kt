@@ -1,4 +1,4 @@
-package io.cro.android.data.entity
+package io.cro.android.data.network.entity
 
 import com.google.gson.annotations.SerializedName
 

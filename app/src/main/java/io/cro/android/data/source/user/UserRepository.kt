@@ -1,6 +1,6 @@
 package io.cro.android.data.source.user
 
-import io.cro.android.data.entity.UserProfile
+import io.cro.android.data.network.entity.UserProfile
 import io.cro.android.di.qualifier.UserLocalData
 import io.cro.android.di.qualifier.UserRemoteData
 import io.reactivex.Single

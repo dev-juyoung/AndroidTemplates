@@ -1,6 +1,6 @@
 package io.cro.android.data.network.api
 
-import io.cro.android.data.entity.UserProfile
+import io.cro.android.data.network.entity.UserProfile
 import io.reactivex.Single
 import retrofit2.http.GET
 
