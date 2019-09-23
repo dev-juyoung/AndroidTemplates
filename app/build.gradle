@@ -1,32 +1,124 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "29.0.0"
+    compileSdkVersion buildConfigs.compileSDK
     defaultConfig {
-        applicationId "io.cro.android"
-        minSdkVersion 23
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        applicationId buildConfigs.appId
+        minSdkVersion buildConfigs.minSDK
+        targetSdkVersion buildConfigs.targetSDK
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    flavorDimensions "mode"
+    productFlavors {
+        dev {
+            dimension "mode"
+            applicationIdSuffix = ".dev"
+            versionCode buildConfigs.versionCode.dev
+            versionName buildConfigs.versionName.dev
+            ext {
+                API_URL = buildConfigs.apiUrl.dev
+            }
+        }
+
+        prod {
+            dimension "mode"
+            versionCode buildConfigs.versionCode.prod
+            versionName buildConfigs.versionName.prod
+            ext {
+                API_URL = buildConfigs.apiUrl.prod
+            }
+        }
+    }
+    android.applicationVariants.all { variant ->
+        def flavor = variant.productFlavors[0]
+        variant.buildConfigField "String", "API_URL", "\"${flavor.ext.API_URL}\""
+        variant.outputs.all {
+            outputFileName = "${getRootProject().name}-${flavor.name}-${variant.versionName}.apk"
+        }
+    }
+    android.variantFilter { variant ->
+        def buildName = variant.buildType.name
+        def flavorName = variant.flavors[0].name
+
+        if (flavorName == 'dev' && buildName == 'release') {
+            variant.ignore = true
+        }
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    // dependencies for local jar files.
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
+    // dependencies for kotlin language.
+    implementation deps.kotlin.stdlib
+
+    // dependencies for androidx artifacts.
+    implementation deps.androidx.ktx
+    implementation deps.androidx.appcompat
+    implementation deps.androidx.fragment.core
+    implementation deps.androidx.fragment.ktx
+    implementation deps.androidx.room.core
+    implementation deps.androidx.room.reactiveStream
+    implementation deps.androidx.lifecycle.core
+    implementation deps.androidx.lifecycle.ktx
+    implementation deps.androidx.lifecycle.reactiveStream
+    implementation deps.androidx.constraintLayout
+
+    // androidx artifacts libraries annotation processors
+    kapt deps.androidx.room.compiler
+    kapt deps.androidx.lifecycle.compiler
+
+    // dependency injection
+    implementation deps.dagger.core
+    implementation deps.dagger.android
+
+    // reactive stream
+    implementation deps.reactiveStream.java
+    implementation deps.reactiveStream.android
+    implementation deps.reactiveStream.kotlin
+
+    // network
+    implementation deps.network.retrofit
+    implementation deps.network.adapter.reactiveStream
+    implementation deps.network.converter.gson
+
+    // java8 datetime backport
+    implementation deps.dateTime
+
+    // secure preferences
+    implementation deps.securePreferences
+
+    // devtools
+    implementation deps.devtools.logger
+    implementation deps.devtools.httpInterceptor
+
+    // 3rd party libraries annotation processors
+    kapt deps.dagger.coreCompiler
+    kapt deps.dagger.androidCompiler
+
+    // dependencies for test
+    testImplementation deps.test.junit
+    androidTestImplementation deps.test.runner
+    androidTestImplementation deps.test.espresso.core
 }
