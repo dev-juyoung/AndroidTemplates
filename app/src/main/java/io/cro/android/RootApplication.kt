@@ -1,5 +1,7 @@
 package io.cro.android
 
+import com.jakewharton.threetenabp.AndroidThreeTen
+import com.orhanobut.hawk.Hawk
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import io.cro.android.di.DaggerApplicationComponent
@@ -14,6 +16,8 @@ class RootApplication : DaggerApplication() {
     override fun onCreate() {
         super.onCreate()
         setupDevTools()
+        AndroidThreeTen.init(this)
+        Hawk.init(this).build()
     }
 
     private fun setupDevTools() {
