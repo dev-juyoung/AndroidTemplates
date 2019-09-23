@@ -9,7 +9,7 @@ import io.cro.android.RootApplication
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [ApplicationModule::class, AndroidSupportInjectionModule::class])
+@Component(modules = [ApplicationModule::class, AndroidSupportInjectionModule::class, RootModule::class])
 interface ApplicationComponent : AndroidInjector<RootApplication> {
     @Component.Factory
     interface Factory {
